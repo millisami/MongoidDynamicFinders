@@ -22,13 +22,15 @@ module Sociable
                    where(query)
                  when "last_by"
                    where(query).last
-                 else
+                 when /\w!$/i
                    _dynamic_finder_method_result = where(query).first
                    unless _dynamic_finder_method_result
                      raise ::Mongoid::Errors::DocumentNotFound.new(self, query)
                    else
                      return _dynamic_finder_method_result
                    end
+                 else
+                   where(query).first
                  end
                 elsif old_method_missing
                   old_method_missing.bind(self).call
